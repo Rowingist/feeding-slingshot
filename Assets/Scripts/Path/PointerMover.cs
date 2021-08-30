@@ -3,30 +3,18 @@ using Zenject;
 
 public class PointerMover : MonoBehaviour
 {
-    [SerializeField] private GameObject _pathHighestPoint;
-    [SerializeField] private GameObject _line;
+    [SerializeField] private Transform _highestParabolaPoint;
     [SerializeField, Range(1, 10)] private float _pointingMultilier;
-    [SerializeField, Range(0, 100)] private float _minDragToStartPointing;
 
-    private FoodMover _foodMover;
     private IMouseService _mouseService;
 
     private Camera _mainCamera;
-    private Vector3 _mousePressedPosition;
-    private Vector3 _newPosition;
-    private Vector3 _deltaMousePosition;
+    private Vector3 _newHighestPointPosition;
 
     [Inject]
     private void Construct(IMouseService mouseService)
     {
         _mouseService = mouseService;
-        _mouseService.MouseLeftButtonPressed += OnSetCurrentMousePosition;
-    }
-
-    [Inject]
-    private void Construct(FoodMover foodMover)
-    {
-        _foodMover = foodMover;
     }
 
     private void Start()
@@ -36,32 +24,11 @@ public class PointerMover : MonoBehaviour
 
     private void Update()
     {
-        if (_mousePressedPosition != Vector3.zero)
+        if (_mouseService.GetAmingPermition())
         {
-            _deltaMousePosition = Input.mousePosition - _mousePressedPosition;
+            _newHighestPointPosition = -_mainCamera.ScreenToViewportPoint(_mouseService.GetDeltaMousePosition());
+            _newHighestPointPosition.z = _highestParabolaPoint.position.z;
+            _highestParabolaPoint.position = _newHighestPointPosition * _pointingMultilier;
         }
-
-        if (_deltaMousePosition.magnitude > _minDragToStartPointing && !_foodMover.IsMoving)
-        {
-            _line.gameObject.SetActive(true);
-            _newPosition = -_mainCamera.ScreenToViewportPoint(_deltaMousePosition);
-            _newPosition.z = _pathHighestPoint.transform.position.z ;
-            _pathHighestPoint.transform.position = _newPosition * _pointingMultilier;
-        }
-        else
-        {
-            _line.gameObject.SetActive(false);
-        }
-    }
-
-    private void OnDisable()
-    {
-        _mouseService.MouseLeftButtonPressed -= OnSetCurrentMousePosition;
-    }
-
-    private void OnSetCurrentMousePosition()
-    {
-        _pathHighestPoint.transform.position = Vector3.zero;
-        _mousePressedPosition = Input.mousePosition;
     }
 }

@@ -4,66 +4,55 @@ using Zenject;
 public class FoodMover : MonoBehaviour
 {
     [SerializeField] private float _speed = 1f;
+    [SerializeField] private FlightPath _flightPath;
+    [SerializeField] private PointerMover _pointerMover;
+    [SerializeField] private FoodSpawner _foodSpawner;
 
-    private Transform[] _points;
-    private FlightPath _flightPath;
+    private GameObject _spawnedFood;
+
+    private float _instantTime = 10f;
+
     private IMouseService _mouseService;
-
-    private float _instantTime;
-
-    public FlightPath FlightPath => _flightPath;
-
-    public bool IsMoving { get; private set; }
 
     [Inject]
     private void Construct(IMouseService mouseService)
     {
         _mouseService = mouseService;
-        _mouseService.MouseLeftButtonPressed += OnBackToStart;
-        _mouseService.MouseLeftButtonReleased += OnStartMoving;
     }
 
-    [Inject]
-    private void Construct(Transform[] parabolaRoots)
+    private void OnEnable()
     {
-        _points = parabolaRoots;
-    }
-
-    private void Awake()
-    {
-        _flightPath = new FlightPath(_points);
+        _mouseService.LeftButtonReleased += OnStartMoving;
     }
 
     private void FixedUpdate()
     {
-        if (IsMoving && _instantTime < _flightPath.Lenght)
+        if (_instantTime < _flightPath.Lenght)
         {
+            _foodSpawner.enabled = false;
+            _pointerMover.enabled = false;
             _instantTime += Time.deltaTime * _speed;
-            transform.position = _flightPath.GetPositionAtTime(_instantTime);
+            _spawnedFood.transform.position = _flightPath.GetPositionAtTime(_instantTime);
+        }
+        else
+        {
+            _foodSpawner.enabled = true;
+            _pointerMover.enabled = true;
         }
     }
 
     private void OnDisable()
     {
-        _mouseService.MouseLeftButtonPressed -= OnBackToStart;
-        _mouseService.MouseLeftButtonReleased -= OnStartMoving;
+        _mouseService.LeftButtonReleased -= OnStartMoving;
     }
 
-    private void OnBackToStart()
+    public void OnStartMoving()
     {
-        RefreshPosition();
-        IsMoving = false;
-    }
-
-    private void OnStartMoving()
-    {
-        IsMoving = true;
         _instantTime = 0;
     }
 
-    public void RefreshPosition()
+    public void SetMovingObject(GameObject food)
     {
-        _instantTime = 0f;
-        transform.position = _flightPath.GetPointPosition(0);
+        _spawnedFood = food;
     }
 }

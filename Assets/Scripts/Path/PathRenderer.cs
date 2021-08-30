@@ -3,38 +3,39 @@ using Zenject;
 
 public class PathRenderer : MonoBehaviour
 {
-    private LineRenderer _lineRenderer;
-    private FoodMover _foodMover;
+    [SerializeField] private FlightPath _flightPath;
+    [SerializeField] private LineRenderer _lineRenderer;
 
     private int _parabolaResolution = 50;
 
-    [Inject]
-    private void Construct(LineRenderer lineRenderer)
-    {
-        _lineRenderer = lineRenderer;
-    }
+    private IMouseService _mouseService;
 
-    private void Start()
+    private Vector3 _previousPososition;
+    private GameObject _aimingObject;
+
+    [Inject]
+    private void Construct(IMouseService mouseService)
     {
-        _foodMover = GetComponent<FoodMover>();
+        _mouseService = mouseService;
     }
 
     private void Update()
     {
-        _foodMover.FlightPath.MakeParabola3D(1f);
-        if ((_foodMover.FlightPath.GetPointsLength() - 1) % 2 != 0)
-            return;
-
-        _lineRenderer.positionCount = _parabolaResolution;
-
-        Vector3 previousPososition = _foodMover.FlightPath.GetPointPosition(0);
-
-        for (int i = 0; i < _parabolaResolution; i++)
+        if (_mouseService.GetAmingPermition())
         {
-            float currentTime = i * _foodMover.FlightPath.Lenght / _parabolaResolution;
-            Vector3 currentPosition = _foodMover.FlightPath.GetPositionAtTime(currentTime);
-            _lineRenderer.SetPosition(i, previousPososition);
-            previousPososition = currentPosition;
+            _lineRenderer.positionCount = _parabolaResolution;
+
+            _previousPososition = _flightPath.GetPointPosition(0);
+            for (int i = 0; i < _parabolaResolution; i++)
+            {
+                float currentTime = i * _flightPath.Lenght / _parabolaResolution;
+                Vector3 currentPosition = _flightPath.GetPositionAtTime(currentTime);
+                _lineRenderer.SetPosition(i, _previousPososition);
+
+
+                    _previousPososition = currentPosition;
+
+            }
         }
     }
 }

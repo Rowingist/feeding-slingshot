@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class EnemyFighter : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    // Start is called before the first frame update
+    void Start()
     {
-        if (other.TryGetComponent(out Enemy enemy))
-            gameObject.transform.localScale *= 1.1f;
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

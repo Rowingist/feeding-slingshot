@@ -1,52 +1,36 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class PlayerInput : MonoBehaviour, IMouseService
+public class PlayerInput : MonoBehaviour
 {
     private Vector3 _mousePressedPosition;
     private Vector3 _deltaMousePosition;
 
-    private bool _dragIsEnoughToAiming;
-    private float _minDragMagnitude = 100f;
-
-    public event UnityAction LeftButtonPressed;
-    public event UnityAction LeftButtonReleased;
-    public event UnityAction Dragging;
-    public event UnityAction AppropriateMagnitudeReached;
+    public event Action<Vector3> LeftButtonStartPositionSet;
+    public event Action LeftButtonReleased;
+    public event Action Dragging;
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            LeftButtonPressed?.Invoke();
             _mousePressedPosition = Input.mousePosition;
+            LeftButtonStartPositionSet?.Invoke(_mousePressedPosition);
+            print("pressed");
         }
-
-        if (_mousePressedPosition != Vector3.zero)
+                
+        _deltaMousePosition = Input.mousePosition - _mousePressedPosition;
+        print(Input.GetMouseButton(0));
+        if (_deltaMousePosition.magnitude > 100 && _deltaMousePosition.magnitude < 200 && Input.GetMouseButton(0))
         {
-            _deltaMousePosition = Input.mousePosition - _mousePressedPosition;
-        }
-
-        _dragIsEnoughToAiming = _deltaMousePosition.magnitude > _minDragMagnitude;
-
-        if (_deltaMousePosition.magnitude > 60 && _deltaMousePosition.magnitude < 100)
-        {
+            print("Dragging");
             Dragging?.Invoke();
         }
 
-        if (Input.GetMouseButtonUp(0) && _dragIsEnoughToAiming)
+        if (Input.GetMouseButtonUp(0))
         {
             LeftButtonReleased?.Invoke();
         }
-    }
-
-    public Vector3 GetDeltaMousePosition()
-    {
-        return _deltaMousePosition;
-    }
-
-    public bool GetAmingPermition()
-    {
-        return Input.GetMouseButton(0) && _dragIsEnoughToAiming;
     }
 }

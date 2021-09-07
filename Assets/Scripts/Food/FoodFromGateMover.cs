@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FoodFromGateMover : MonoBehaviour
 {
-    private float _speed = 7f;
+    private float _speed = 4f;
 
     private GameObject _target;
 
@@ -15,5 +14,13 @@ public class FoodFromGateMover : MonoBehaviour
     public void SetTarget(GameObject food)
     {
        _target = food;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent(out FighterSizeChanger fighter) || other.TryGetComponent(out ForbidenArea forbidenArea))
+        {
+            Destroy(gameObject);
+        }
     }
 }

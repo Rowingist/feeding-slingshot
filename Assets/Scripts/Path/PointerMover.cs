@@ -1,34 +1,46 @@
 using UnityEngine;
-using Zenject;
 
+[RequireComponent(typeof(FoodMover))]
 public class PointerMover : MonoBehaviour
 {
-    [SerializeField] private Transform _highestParabolaPoint;
-    [SerializeField, Range(1, 10)] private float _pointingMultilier;
+    [SerializeField, Range(1, 20)] private float _pointingMultilier;
 
-    private IMouseService _mouseService;
+    private FlightPath _flightPath;
 
-    private Camera _mainCamera;
-    private Vector3 _newHighestPointPosition;
+    private Vector3 _newHighestPointPosition, _newFinishPointPosition;
+    private Vector3 _mouseStartPosition;
+    private float _finishPointPozitionX;
 
-    [Inject]
-    private void Construct(IMouseService mouseService)
+    private void Awake()
     {
-        _mouseService = mouseService;
+        _flightPath = GetComponent<FlightPath>();
     }
 
     private void Start()
     {
-        _mainCamera = Camera.main;
+        _finishPointPozitionX = _flightPath.GetFinishPointPosition().x;
     }
 
     private void Update()
     {
-        if (_mouseService.GetAmingPermition())
-        {
-            _newHighestPointPosition = -_mainCamera.ScreenToViewportPoint(_mouseService.GetDeltaMousePosition());
-            _newHighestPointPosition.z = _highestParabolaPoint.position.z;
-            _highestParabolaPoint.position = _newHighestPointPosition * _pointingMultilier;
-        }
+        MoveHighestPoint();
+
+        _newFinishPointPosition.x = _finishPointPozitionX - Camera.main.ScreenToViewportPoint(Input.mousePosition - _mouseStartPosition).x;
+        _newFinishPointPosition.z = _flightPath.GetFinishPointPosition().z;
+        _newFinishPointPosition.y = _flightPath.GetFinishPointPosition().y;
+        _flightPath.MoveFinishPointTo(_newFinishPointPosition);
+    }
+
+    private void MoveHighestPoint()
+    {
+        Vector3 deltaMousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition - _mouseStartPosition);
+        _newHighestPointPosition = -deltaMousePosition;
+        _newHighestPointPosition.z = _flightPath.GetHighestPointPosition().z;
+        _flightPath.MoveHighestPointTo(_newHighestPointPosition * _pointingMultilier);
+    }
+
+    public void SetMouseStartPosition(Vector3 mouseStartPosotion)
+    {
+        _mouseStartPosition = mouseStartPosotion;
     }
 }

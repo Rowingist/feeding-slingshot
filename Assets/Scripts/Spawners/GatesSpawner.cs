@@ -7,6 +7,7 @@ public class GatesSpawner : ObjectPool
 
     private float _timeBetweenSpawn = 5f;
     private float _elapsedTime = 0f;
+    private int _previousSetPointIndex = 0;
 
     private void Start()
     {
@@ -23,10 +24,18 @@ public class GatesSpawner : ObjectPool
 
     public void Spawn()
     {
+        int random = Random.Range(0, _spawnPoints.Length);
+
+        if (_previousSetPointIndex == random)
+        {
+            _elapsedTime = 0f;
+            return;
+        }
+        
         if (TryGetObject(out GameObject gate))
         {
-            int random = Random.Range(0, _spawnPoints.Length);
             SetGate(gate, _spawnPoints[random].position);
+            _previousSetPointIndex = random;
             _elapsedTime = 0;
         }
     }

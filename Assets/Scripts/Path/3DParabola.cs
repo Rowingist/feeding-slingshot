@@ -40,13 +40,6 @@ public class Parabola3D
 
     private void RefreshCurveNormal()
     {
-        //                        .  E   .
-        //                   .       |       point[1]
-        //             .             |h         |       .
-        //         .                 |       ___v1------point[2]
-        //      .            ______--vl------    
-        // point[0]---------
-
         Ray rayToClosestLine = new Ray(_coefficientA, _coefficientC - _coefficientA);
         Vector3 currentPoint = GetClosestPointInLine(rayToClosestLine, _coefficientB);
 
@@ -77,22 +70,6 @@ public class Parabola3D
 
         _parabola2D = new Parabola2D(twoDimensionA, twoDimensionB, twoDimensionC);
         _height = Vector3.up;
-    }
-
-    public Vector3 GetHighestPoint()
-    {
-        float coefficientA = _parabola2D.CoefficientA;
-        float coefficientB = _parabola2D.CoefficientB + (_coefficientC.y - _coefficientA.y) / _parabola2D.Length;
-        float coefficitntC = _parabola2D.CoefficientC + _coefficientA.y - _coefficientC.y;
-
-        var comletePorabola = new Parabola2D(coefficientA, coefficientB, coefficitntC, _parabola2D.Length);
-
-        Vector3 hiestPorabolaPoint = new Vector3();
-        hiestPorabolaPoint.y = comletePorabola.RangeOfFunction.y;
-        hiestPorabolaPoint.x = _coefficientA.x + (_coefficientC.x - _coefficientA.x) * (comletePorabola.RangeOfFunction.x / comletePorabola.Length);
-        hiestPorabolaPoint.z = _coefficientA.z + (_coefficientC.z - _coefficientA.z) * (comletePorabola.RangeOfFunction.x / comletePorabola.Length);
-
-        return hiestPorabolaPoint;
     }
 
     public Vector3 GetPositionAtLength(float builtLength)

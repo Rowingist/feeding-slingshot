@@ -1,19 +1,12 @@
 ﻿using UnityEngine;
-using Zenject;
 
 public class FlightPath : MonoBehaviour
 {
-    [SerializeField] private Transform[] _parabolaRoots;
-
+    private Transform[] _parabolaRoots;
     private Parabola3D[] _parabolas;
     private float[] _parabolaParts;
 
     public float Lenght { get; private set; }
-
-    private void Awake()
-    {
-        MakeParabola3D();
-    }
 
     private void Update()
     {
@@ -35,11 +28,6 @@ public class FlightPath : MonoBehaviour
             _parabolaParts = new float[_parabolas.Length];
         }
 
-        if (_parabolas == null)
-        {
-            return;
-        }
-
         Lenght = 0;
 
         Vector3 pointA, pointB, pointC;
@@ -54,14 +42,39 @@ public class FlightPath : MonoBehaviour
         }
     }
 
-    public Vector3 GetPositionAtTime(float time)
+    public Vector3 GetPositionForPoint(float pathPointPosition)
     {
-        var percent = time / _parabolaParts[0];
+        var percent = pathPointPosition / _parabolaParts[0];
         return _parabolas[0].GetPositionAtLength(percent * _parabolas[0].Length);
     }
 
     public Vector3 GetPointPosition(int pointIndex)
     {
         return _parabolaRoots[pointIndex].position;
+    }
+
+    public void MoveHighestPointTo(Vector3 newPosition)
+    {
+        _parabolaRoots[1].position = newPosition;
+    }
+
+    public void MoveFinishPointTo(Vector3 newPosition)
+    {
+        _parabolaRoots[2].position = newPosition;
+    }
+
+    public Vector3 GetHighestPointPosition()
+    {
+        return _parabolaRoots[1].position;
+    }
+
+    public Vector3 GetFinishPointPosition()
+    {
+        return _parabolaRoots[2].position;
+    }
+
+    public void InitFlightPathRoots(Transform[] flightPathRoots)
+    {
+        _parabolaRoots = flightPathRoots;
     }
 }

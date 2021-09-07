@@ -1,27 +1,33 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] private Fighter _playerFighter;
-    [SerializeField] private Fighter _enemyFighter;
+    [SerializeField] private FighterSizeChanger _playerFighter;
+    [SerializeField] private FighterSizeChanger _enemyFighter;
 
-    public event UnityAction GameOver;
+    public event Action Won;
+    public event Action Over;
 
     private void OnEnable()
     {
-        _playerFighter.Killed += OnEndGame;
-        _enemyFighter.Killed += OnEndGame;
+        _playerFighter.Lost += OnOverState;
+        _enemyFighter.Lost += OnWinState;
     }
 
     private void OnDisable()
     {
-        _playerFighter.Killed -= OnEndGame;
-        _enemyFighter.Killed -= OnEndGame;
+        _playerFighter.Lost -= OnOverState;
+        _enemyFighter.Lost -= OnWinState;
     }
 
-    private void OnEndGame()
+    private void OnWinState()
     {
-        GameOver?.Invoke();
+        Won.Invoke();
+    }
+
+    private void OnOverState()
+    {
+        Over?.Invoke();
     }
 }

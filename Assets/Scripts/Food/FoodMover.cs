@@ -19,6 +19,11 @@ public class FoodMover : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Move();
+    }
+
+    private void Move()
+    {
         if (_instantTime < _flightPath.Lenght)
         {
             _instantTime += Time.deltaTime * _speed;

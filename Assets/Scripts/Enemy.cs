@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     private FlightPath _enemyFlightPath;
     private float _instantTime = float.MaxValue;
     private float _elapsedTime = 0f;
-    private float _timeBetweenShoot = 4f;
+    private float _timeBetweenThrough = 4f;
 
     private void Awake()
     {
@@ -20,18 +20,27 @@ public class Enemy : MonoBehaviour
         _enemyFlightPath.InitFlightPathRoots(_flightPathRoots);
     }
 
-    private void Update()
+    private void FixedUpdate()
+    {
+        ChangeMoveTrajectory();
+        Move();
+    }
+
+    private void ChangeMoveTrajectory()
     {
         _elapsedTime += Time.deltaTime;
-        if(_elapsedTime >= _timeBetweenShoot)
+        if(_elapsedTime >= _timeBetweenThrough)
         {
             _elapsedTime = 0f;
-            _enemyFlightPath.MoveHighestPointTo(new Vector3(Random.Range(-5f, 5f), Random.Range(1f, 7f), 0));
             _instantTime = 0f;
+            float _newPositionX = Random.Range(-5f, 5f);
+            float _newPositionY = Random.Range(1f, 7f);
+            Vector3 newTrajectoryMiddleRoot = new Vector3(_newPositionX, _newPositionY, 0f);
+            _enemyFlightPath.MoveHighestPointTo(newTrajectoryMiddleRoot);
         }
     }
 
-    private void FixedUpdate()
+    private void Move()
     {
         if (_instantTime < _enemyFlightPath.Lenght)
         {

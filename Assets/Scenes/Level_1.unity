@@ -1196,6 +1196,7 @@ MonoBehaviour:
   _playerFighter: {fileID: 919132147919114630}
   _enemyFighter: {fileID: 919132148806298775}
   _game: {fileID: 963194229}
+  _speed: 0.2
 --- !u!1 &470873257
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,7 +1234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.17666665, y: 0.284}
   m_AnchorMax: {x: 0.82500005, y: 0.31456253}
-  m_AnchoredPosition: {x: -1.0002441, y: -24.000244}
+  m_AnchoredPosition: {x: -1.0002441, y: -24.000305}
   m_SizeDelta: {x: 3.4041004, y: -1.6082993}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &470873259
@@ -2306,11 +2307,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841506271}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8897004, y: 1.9648913, z: 1}
-  m_Center: {x: 0.010544606, y: 0.4824455, z: 0}
+  m_Size: {x: 0.8900266, y: 1.9648913, z: 1}
+  m_Center: {x: 0.00129164, y: 0.48244554, z: 0}
 --- !u!23 &841506273
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2461,7 +2462,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Level
 
-    complete!'
+    completed!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4437,7 +4438,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 14.999878, y: -87.00012}
+  m_AnchoredPosition: {x: 14.999878, y: -87.000244}
   m_SizeDelta: {x: -213.32019, y: -1703.3301}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1446140878

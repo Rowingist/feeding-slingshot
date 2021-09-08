@@ -31,7 +31,7 @@ public class FoodSpawner : ObjectPool
 
     public void Spawn()
     {
-        if (TryGetMultipleObject(out GameObject foodPrefab))
+        if (TryGetRandomObject(out GameObject foodPrefab))
         {
             if (foodPrefab.TryGetComponent(out Food food))
             {
@@ -43,7 +43,7 @@ public class FoodSpawner : ObjectPool
                 flightPath.InitFlightPathRoots(_flightPathRoots);
             }
 
-            if (foodPrefab.TryGetComponent(out PointerMover pointerMover ))
+            if (foodPrefab.TryGetComponent(out PathChanger pointerMover ))
             {
                 pointerMover.enabled = true;
                 pointerMover.SetMouseStartPosition(_mouseStartPostion);
@@ -63,7 +63,7 @@ public class FoodSpawner : ObjectPool
         if (GetSpawnPermition())
             return;
 
-        food.InitRuberPositio(_slingshotRubber.position);
+        food.InitSlingshotRuberPosition(_slingshotRubber.position);
         food.transform.position = spawnPoint;
         food.gameObject.SetActive(true);
     }

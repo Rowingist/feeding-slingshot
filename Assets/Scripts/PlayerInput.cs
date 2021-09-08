@@ -17,14 +17,12 @@ public class PlayerInput : MonoBehaviour
         {
             _mousePressedPosition = Input.mousePosition;
             LeftButtonStartPositionSet?.Invoke(_mousePressedPosition);
-            print("pressed");
         }
                 
         _deltaMousePosition = Input.mousePosition - _mousePressedPosition;
-        print(Input.GetMouseButton(0));
+
         if (_deltaMousePosition.magnitude > 100 && _deltaMousePosition.magnitude < 200 && Input.GetMouseButton(0))
         {
-            print("Dragging");
             Dragging?.Invoke();
         }
 

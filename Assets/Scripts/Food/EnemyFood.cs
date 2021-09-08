@@ -1,6 +1,3 @@
 using UnityEngine;
 
-public class EnemyFood : MonoBehaviour
-{
-
-}
+public class EnemyFood : MonoBehaviour { }

@@ -1,12 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
 
-[RequireComponent(typeof(FlightPath))]
+[RequireComponent(typeof(PlayerInput), typeof(FoodMover), typeof(PathChanger))]
+[RequireComponent(typeof(PathRenderer))]
 public class Food : MonoBehaviour
 {
     private PlayerInput _mouseService;
     private FoodMover _foodMover;
-    private PointerMover _pointerMover;
+    private PathChanger _pointerMover;
     private PathRenderer _pathRenderer;
     private Vector3 _slingshotRuberPosition;
 
@@ -14,7 +15,7 @@ public class Food : MonoBehaviour
     {
         _mouseService = GetComponent<PlayerInput>();
         _foodMover = GetComponent<FoodMover>();
-        _pointerMover = GetComponent<PointerMover>();
+        _pointerMover = GetComponent<PathChanger>();
         _pathRenderer = GetComponent<PathRenderer>();
     }
 
@@ -51,7 +52,7 @@ public class Food : MonoBehaviour
         _pointerMover.enabled = false;
     }
 
-    public void InitRuberPositio(Vector3 position)
+    public void InitSlingshotRuberPosition(Vector3 position)
     {
         _slingshotRuberPosition = position + new Vector3(0f, 0f, 0.01f);
     }

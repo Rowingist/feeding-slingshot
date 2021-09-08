@@ -40,7 +40,7 @@ public class ObjectPool : MonoBehaviour
         return result != null;
     }
 
-    protected bool TryGetMultipleObject(out GameObject result)
+    protected bool TryGetRandomObject(out GameObject result)
     {
         result = _pool.ElementAt(Random.Range(0, _pool.Count));
        

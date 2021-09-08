@@ -15,7 +15,7 @@ public class FighterSizeChanger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Food food) || other.TryGetComponent(out FoodFromGateMover spawnedFood)|| other.TryGetComponent(out EnemyFood enemyFood))
+        if (other.TryGetComponent(out Food food) || other.TryGetComponent(out FoodFromGateMover spawnedFood) || other.TryGetComponent(out EnemyFood enemyFood))
         {
             CurrentSkinSize += _scaleFactor;
             _skinnedMeshRenderer.SetBlendShapeWeight(0, CurrentSkinSize);
@@ -23,7 +23,7 @@ public class FighterSizeChanger : MonoBehaviour
             _particleSystem.Play();
         }
 
-        if(other.TryGetComponent(out Water water))
+        if (other.TryGetComponent(out Water water))
         {
             Lost?.Invoke();
         }

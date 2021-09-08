@@ -9,6 +9,7 @@ public class Parabola3D
 
     private Parabola2D _parabola2D;
     private bool _tooClose;
+
     public float Length { get; private set; }
 
     public Parabola3D(Vector3 a, Vector3 b, Vector3 c)

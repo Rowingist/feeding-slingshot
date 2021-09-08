@@ -8,7 +8,7 @@ public class Gate : MonoBehaviour
     [SerializeField] private GameObject _smokeEffect;
     [SerializeField] private GameObject _foodPrefab;
 
-    private float _randomX, _randomY;
+    private float _randomX, _randomY, _randomZ;
 
     private void Start()
     {
@@ -22,26 +22,38 @@ public class Gate : MonoBehaviour
         {
             for (int i = 0; i < _multiplyer; i++)
             {
-                _randomX = Random.Range(-1f, 1f);
-                _randomY = Random.Range(-0.5f, 0.5f);
-                Vector3 spread = new Vector3(_randomX, _randomY, Random.Range(1f, 3f));
-                GameObject newFood = Instantiate(_foodPrefab, transform.localPosition + spread, transform.localRotation);
-                FoodFromGateMover foodFromGateMover = newFood.AddComponent(typeof(FoodFromGateMover)) as FoodFromGateMover;
-                MeshFilter meshFilter = newFood.AddComponent(typeof(MeshFilter)) as MeshFilter; ;
-                MeshRenderer meshRenderer = newFood.AddComponent(typeof(MeshRenderer)) as MeshRenderer; ;
-                meshFilter.mesh = food.GetComponent<MeshFilter>().mesh;
-                meshRenderer.material = food.GetComponent<MeshRenderer>().material;
-                foodFromGateMover.SetTarget(food.gameObject);
+                RandomizePsition();
+                CopyFlyingFood(food);
             }
 
             _smokeEffect.gameObject.SetActive(true);
-            StartCoroutine(Deactivate());
+            StartCoroutine(SetDeactivationDelay(0.3f));
         }
     }
 
-    private IEnumerator Deactivate()
+    private void CopyFlyingFood(Food food)
     {
-        yield return new WaitForSeconds(0.3f);
+        Vector3 spread = new Vector3(_randomX, _randomY, _randomZ);
+        GameObject newFood = Instantiate(_foodPrefab, transform.localPosition + spread, Quaternion.Euler(spread));
+        FoodFromGateMover foodFromGateMover = newFood.AddComponent(typeof(FoodFromGateMover)) as FoodFromGateMover;
+        MeshFilter meshFilter = newFood.AddComponent(typeof(MeshFilter)) as MeshFilter; ;
+        MeshRenderer meshRenderer = newFood.AddComponent(typeof(MeshRenderer)) as MeshRenderer; ;
+        
+        meshFilter.mesh = food.GetComponent<MeshFilter>().mesh;
+        meshRenderer.material = food.GetComponent<MeshRenderer>().material;
+        foodFromGateMover.SetTarget(food.gameObject);
+    }
+
+    private void RandomizePsition()
+    {
+        _randomX = Random.Range(-1f, 1f);
+        _randomY = Random.Range(-0.5f, 0.5f);
+        _randomZ = Random.Range(0.5f, 1f);
+    }
+
+    private IEnumerator SetDeactivationDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         _smokeEffect.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }

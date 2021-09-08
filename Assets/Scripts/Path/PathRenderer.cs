@@ -1,14 +1,15 @@
 using UnityEngine;
 
+[RequireComponent(typeof(FlightPath), typeof(PlayerInput))]
 public class PathRenderer : MonoBehaviour
 {
     private FlightPath _flightPath;
-    private LineRenderer _lineRenderer;
     private PlayerInput _playerInput;
-
-    private int _parabolaResolution = 50;
+    private LineRenderer _lineRenderer;
 
     private Vector3 _currentPosition, _previousPososition;
+
+    private int _parabolaResolution = 50;
 
     private void Awake()
     {
@@ -40,22 +41,31 @@ public class PathRenderer : MonoBehaviour
     private void Render()
     {
         _previousPososition = _flightPath.GetPointPosition(0);
-        _lineRenderer.SetColors(Color.white, Color.white);
+        SetLineColor(Color.white);
 
         for (int i = 0; i < _parabolaResolution; i++)
         {
             float currentPoint = i * _flightPath.Lenght / _parabolaResolution;
             _currentPosition = _flightPath.GetPositionForPoint(currentPoint);
-            Debug.DrawRay(_currentPosition, Vector3.forward, Color.red);
-            Ray ray = new Ray(_currentPosition, Vector3.forward);
-            if(Physics.Raycast(ray, out RaycastHit hit, 1, ~9))
-            {
-                _lineRenderer.SetColors(Color.green, Color.green);
-            }
-
+            HitIntoAim();
             _lineRenderer.SetPosition(i, _previousPososition);
             _previousPososition = _currentPosition;
         }
+    }
+
+    private void HitIntoAim()
+    {
+        Ray ray = new Ray(_currentPosition, Vector3.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1, ~9))
+        {
+            SetLineColor(Color.green);
+        }
+    }
+
+    private void SetLineColor(Color color)
+    {
+        _lineRenderer.startColor = color;
+        _lineRenderer.endColor = color;
     }
 
     private void OnDeactivateLine()

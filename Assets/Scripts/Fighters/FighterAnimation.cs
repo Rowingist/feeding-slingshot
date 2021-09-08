@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -42,16 +41,16 @@ public class FighterAnimation : MonoBehaviour
         StartCoroutine(SetDeletionDelay(5f));
     }
 
-    private void OnVictoryState()
-    {
-        _animator.Play(_victoryState);
-    }
-
     private IEnumerator SetDeletionDelay(float delay)
     {
         yield return new WaitForSeconds(0.25f);
         _boxCollider.isTrigger = false;
         yield return new WaitForSeconds(delay);
         gameObject.SetActive(false);
+    }
+
+    private void OnVictoryState()
+    {
+        _animator.Play(_victoryState);
     }
 }

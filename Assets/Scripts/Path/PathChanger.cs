@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(FoodMover))]
-public class PointerMover : MonoBehaviour
+[RequireComponent(typeof(FlightPath))]
+public class PathChanger : MonoBehaviour
 {
     [SerializeField, Range(1, 20)] private float _pointingMultilier;
 
@@ -24,11 +24,7 @@ public class PointerMover : MonoBehaviour
     private void Update()
     {
         MoveHighestPoint();
-
-        _newFinishPointPosition.x = _finishPointPozitionX - Camera.main.ScreenToViewportPoint(Input.mousePosition - _mouseStartPosition).x;
-        _newFinishPointPosition.z = _flightPath.GetFinishPointPosition().z;
-        _newFinishPointPosition.y = _flightPath.GetFinishPointPosition().y;
-        _flightPath.MoveFinishPointTo(_newFinishPointPosition);
+        MoveFinishPoint();
     }
 
     private void MoveHighestPoint()
@@ -37,6 +33,14 @@ public class PointerMover : MonoBehaviour
         _newHighestPointPosition = -deltaMousePosition;
         _newHighestPointPosition.z = _flightPath.GetHighestPointPosition().z;
         _flightPath.MoveHighestPointTo(_newHighestPointPosition * _pointingMultilier);
+    }
+
+    private void MoveFinishPoint()
+    {
+        _newFinishPointPosition.x = _finishPointPozitionX - Camera.main.ScreenToViewportPoint(Input.mousePosition - _mouseStartPosition).x;
+        _newFinishPointPosition.z = _flightPath.GetFinishPointPosition().z;
+        _newFinishPointPosition.y = _flightPath.GetFinishPointPosition().y;
+        _flightPath.MoveFinishPointTo(_newFinishPointPosition);
     }
 
     public void SetMouseStartPosition(Vector3 mouseStartPosotion)

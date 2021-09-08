@@ -8,16 +8,6 @@ public class Parabola2D
     public Vector2 RangeOfFunction { get; private set; }
     public float Length { get; private set; }
 
-    public Parabola2D(float ñoefficientA, float ñoefficientB, float ñoefficientC, float length)
-    {
-        CoefficientA = ñoefficientA;
-        CoefficientB = ñoefficientB;
-        CoefficientC = ñoefficientC;
-
-        SetFunctionRange();
-        Length = length;
-    }
-
     public Parabola2D(Vector2 a, Vector2 b, Vector2 c)
     {
         var divisor = (a.x - b.x) * (a.x - c.x) * (c.x - b.x);
@@ -38,14 +28,14 @@ public class Parabola2D
         Length = Vector2.Distance(a, c);
     }
 
-    public float GetFunctionResult(float x)
-    {
-        return CoefficientA * x * x + CoefficientB * x + CoefficientC;
-    }
-
     private void SetFunctionRange()
     {
         var extremum = -CoefficientB / (2 * CoefficientA);
         RangeOfFunction = new Vector2(extremum, GetFunctionResult(extremum));
+    }
+
+    public float GetFunctionResult(float x)
+    {
+        return CoefficientA * x * x + CoefficientB * x + CoefficientC;
     }
 }

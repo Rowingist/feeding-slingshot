@@ -1,40 +1,86 @@
 using UnityEngine;
-using Zenject;
 
+[RequireComponent(typeof(FlightPath), typeof(PlayerInput))]
 public class PathRenderer : MonoBehaviour
 {
+    private FlightPath _flightPath;
+    private PlayerInput _playerInput;
     private LineRenderer _lineRenderer;
-    private FoodMover _foodMover;
+
+    private Vector3 _currentPosition, _previousPososition;
 
     private int _parabolaResolution = 50;
 
-    [Inject]
-    private void Construct(LineRenderer lineRenderer)
+    private void Awake()
     {
-        _lineRenderer = lineRenderer;
+        _flightPath = GetComponent<FlightPath>();
+        _playerInput = GetComponent<PlayerInput>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _foodMover = GetComponent<FoodMover>();
+        _playerInput.LeftButtonReleased += OnDeactivateLine;
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.LeftButtonReleased -= OnDeactivateLine;
     }
 
     private void Update()
     {
-        _foodMover.FlightPath.MakeParabola3D(1f);
-        if ((_foodMover.FlightPath.GetPointsLength() - 1) % 2 != 0)
-            return;
+        SetPositionCount(_parabolaResolution);
+        Render();
+    }
 
-        _lineRenderer.positionCount = _parabolaResolution;
+    private void SetPositionCount(int resolution)
+    {
+        _lineRenderer.positionCount = resolution;
+    }
 
-        Vector3 previousPososition = _foodMover.FlightPath.GetPointPosition(0);
+    private void Render()
+    {
+        _previousPososition = _flightPath.GetPointPosition(0);
+        SetLineColor(Color.white);
 
         for (int i = 0; i < _parabolaResolution; i++)
         {
-            float currentTime = i * _foodMover.FlightPath.Lenght / _parabolaResolution;
-            Vector3 currentPosition = _foodMover.FlightPath.GetPositionAtTime(currentTime);
-            _lineRenderer.SetPosition(i, previousPososition);
-            previousPososition = currentPosition;
+            float currentPoint = i * _flightPath.Lenght / _parabolaResolution;
+            _currentPosition = _flightPath.GetPositionForPoint(currentPoint);
+            HitIntoAim();
+            _lineRenderer.SetPosition(i, _previousPososition);
+            _previousPososition = _currentPosition;
         }
+    }
+
+    private void HitIntoAim()
+    {
+        Ray ray = new Ray(_currentPosition, Vector3.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1, ~9))
+        {
+            SetLineColor(Color.green);
+        }
+    }
+
+    private void SetLineColor(Color color)
+    {
+        _lineRenderer.startColor = color;
+        _lineRenderer.endColor = color;
+    }
+
+    private void OnDeactivateLine()
+    {
+        _lineRenderer.enabled = false;
+    }
+
+    public void SetLineRenderer(LineRenderer lineRenderer)
+    {
+        _lineRenderer = lineRenderer;
+    }
+
+    public void ResetLine()
+    {
+        _lineRenderer.positionCount = 0;
+        _flightPath.MoveHighestPointTo(Vector3.zero);
     }
 }

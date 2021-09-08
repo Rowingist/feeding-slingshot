@@ -1,46 +1,51 @@
 using UnityEngine;
-using Zenject;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private float _speed = 1f;
-    [SerializeField] private Transform[] _points;
+    [SerializeField] private float _speed = 5f;
+    [SerializeField] private Transform[] _flightPathRoots;
 
-    private Transform _pathHighestPoint;
     private FlightPath _enemyFlightPath;
-
-    private float _instantTime;
+    private float _instantTime = float.MaxValue;
+    private float _elapsedTime = 0f;
+    private float _timeBetweenThrough = 4f;
 
     private void Awake()
     {
-        _enemyFlightPath = new FlightPath(_points);
-        _pathHighestPoint = _points[1];
-        _pathHighestPoint.transform.position += new Vector3(3, 4, 0);
-        _enemyFlightPath.MakeParabola3D(1f);
+        _enemyFlightPath = GetComponent<FlightPath>();
     }
 
-    private void Update()
+    private void Start()
+    {
+        _enemyFlightPath.InitFlightPathRoots(_flightPathRoots);
+    }
+
+    private void FixedUpdate()
+    {
+        ChangeMoveTrajectory();
+        Move();
+    }
+
+    private void ChangeMoveTrajectory()
+    {
+        _elapsedTime += Time.deltaTime;
+        if(_elapsedTime >= _timeBetweenThrough)
+        {
+            _elapsedTime = 0f;
+            _instantTime = 0f;
+            float _newPositionX = Random.Range(-5f, 5f);
+            float _newPositionY = Random.Range(1f, 7f);
+            Vector3 newTrajectoryMiddleRoot = new Vector3(_newPositionX, _newPositionY, 0f);
+            _enemyFlightPath.MoveHighestPointTo(newTrajectoryMiddleRoot);
+        }
+    }
+
+    private void Move()
     {
         if (_instantTime < _enemyFlightPath.Lenght)
         {
             _instantTime += Time.deltaTime * _speed;
-            transform.position = _enemyFlightPath.GetPositionAtTime(_instantTime);
+            transform.position = _enemyFlightPath.GetPositionForPoint(_instantTime);
         }
-    }
-
-    private void OnBackToStart()
-    {
-        RefreshPosition();
-    }
-
-    private void OnStartMoving()
-    {
-        _instantTime = 0;
-    }
-
-    public void RefreshPosition()
-    {
-        _instantTime = 0f;
-        transform.position = _enemyFlightPath.GetPointPosition(0);
     }
 }

@@ -73,7 +73,7 @@ public class Parabola3D
         _height = Vector3.up;
     }
 
-    public Vector3 GetPositionAtLength(float builtLength)
+    public Vector3 GetPositionAtTime(float builtLength)
     {
         Vector3 positionAtLength;
         float lengthsRelation = builtLength / Length;

@@ -4,30 +4,36 @@ public class FoodMover : MonoBehaviour
 {
     [SerializeField] private float _speed = 1f;
 
-    private FlightPath _flightPath;
-    private float _instantTime = float.MaxValue;
+    private Transform[] _parabolaRoots;
+    private Parabola3D _flightPath;
 
-    private void Awake()
-    {
-        _flightPath = GetComponent<FlightPath>();
-    }
+    private float _instantTime = float.MaxValue;
 
     private void OnEnable()
     {
+        Vector3 pointA, pointB, pointC;
+        pointA = _parabolaRoots[0].position;
+        pointB = _parabolaRoots[1].position;
+        pointC = _parabolaRoots[2].position;
+        _flightPath = new Parabola3D(pointA, pointB, pointC);
         _instantTime = 0f;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        Move();
-    }
-
-    private void Move()
-    {
-        if (_instantTime < _flightPath.Lenght)
+        if (_instantTime < _flightPath.Length)
         {
             _instantTime += Time.deltaTime * _speed;
-            transform.position = _flightPath.GetPositionForPoint(_instantTime);
+            transform.position = _flightPath.GetPositionAtTime(_instantTime);
         }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _parabolaRoots[2].position, _speed * Time.deltaTime); ;
+        }
+    }
+
+    public void IntitParabolaRoots(Transform[] roots)
+    {
+        _parabolaRoots = roots;
     }
 }

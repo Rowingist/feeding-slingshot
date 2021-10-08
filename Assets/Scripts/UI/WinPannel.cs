@@ -9,14 +9,12 @@ public class WinPannel : MonoBehaviour
 
     private void OnEnable()
     {
-        _game.Won += OnActivateWinPannel;
-        _game.Over += OnActivateLosePannel;
+        _game.Over += OnActivateWinPannel;
     }
 
     private void OnDisable()
     {
-        _game.Won -= OnActivateWinPannel;
-        _game.Over -= OnActivateLosePannel;
+        _game.Over -= OnActivateWinPannel;
     }
 
     private void OnActivateWinPannel()

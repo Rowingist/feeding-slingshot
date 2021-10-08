@@ -4,8 +4,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class ProgressBar : MonoBehaviour
 {
-    [SerializeField] private FighterSizeChanger _playerSizeChanger;
-    [SerializeField] private FighterSizeChanger _enemySizeChanger;
+    [SerializeField] private SizeChanger _playerSizeChanger;
+    [SerializeField] private SizeChanger _enemySizeChanger;
 
     private Slider _slider;
     private float _startValue = 0.5f;
@@ -18,19 +18,15 @@ public class ProgressBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _playerSizeChanger.EatenFood += OnEncreaceValue;
-        _enemySizeChanger.EatenFood += OnDecreaceValue;
     }
 
     private void OnDisable()
     {
-        _playerSizeChanger.EatenFood += OnEncreaceValue;
-        _enemySizeChanger.EatenFood += OnDecreaceValue;
+
     }
 
-    private void OnEncreaceValue()
+    private void OnIncreaceValue()
     {
-        _slider.value += _startValue / _playerSizeChanger.ScaleFactor;
     }
 
     private void OnDecreaceValue()

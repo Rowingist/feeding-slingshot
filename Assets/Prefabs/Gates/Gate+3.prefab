@@ -186,7 +186,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8843589241483371505}
-  - component: {fileID: 8820420767458142894}
   - component: {fileID: 4896205616484301401}
   m_Layer: 9
   m_Name: Gate+3
@@ -214,21 +213,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8820420767458142894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2608894603119741425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c327935cb0be634b944717e237dc5b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _multiplyer: 3
-  _smokeEffect: {fileID: 5660311248868738731}
-  _foodPrefab: {fileID: 7666011066263197888, guid: 0df1621fcbbd85a42992e72beae3fb4a, type: 3}
 --- !u!65 &4896205616484301401
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -496,11 +480,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3c1271be360a8b4caf0f59b65837ad3, type: 3}
---- !u!1 &5660311248868738731 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7686421173631644053, guid: f3c1271be360a8b4caf0f59b65837ad3, type: 3}
-  m_PrefabInstance: {fileID: 2604998416813717310}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5660311248868738742 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7686421173631644040, guid: f3c1271be360a8b4caf0f59b65837ad3, type: 3}

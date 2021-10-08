@@ -39,16 +39,4 @@ public class ObjectPool : MonoBehaviour
 
         return result != null;
     }
-
-    protected bool TryGetRandomObject(out GameObject result)
-    {
-        result = _pool.ElementAt(Random.Range(0, _pool.Count));
-       
-        return result != null;
-    }
-
-    protected bool GetSpawnPermition()
-    {
-        return _pool.Find(p => p.activeSelf == true);
-    }
 }

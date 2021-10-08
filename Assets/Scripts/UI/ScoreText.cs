@@ -3,7 +3,7 @@ using TMPro;
 
 public class ScoreText : MonoBehaviour
 {
-    [SerializeField] private FighterSizeChanger _playerFighter;
+    [SerializeField] private SizeChanger _playerFighter;
 
     private TMP_Text _score;
 
@@ -16,12 +16,10 @@ public class ScoreText : MonoBehaviour
 
     private void OnEnable()
     {
-        _playerFighter.EatenFood += OnScoreChanged;
     }
 
     private void OnDisable()
     {
-        _playerFighter.EatenFood -= OnScoreChanged;
     }
 
     private void OnScoreChanged()

@@ -14,16 +14,6 @@ public class ScoreAnimation : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private void OnEnable()
-    {
-        _playerInput.Dragging += OnPlay;
-    }
-
-    private void OnDisable()
-    {
-        _playerInput.Dragging -= OnPlay;
-    }
-
     private void OnPlay()
     {
         _animator.SetTrigger(_moveOnLeft);

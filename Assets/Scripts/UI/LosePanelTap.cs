@@ -14,7 +14,7 @@ public class LosePanelTap : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (UnityEngine.Input.GetMouseButtonDown(0))
         {
             SceneManager.LoadScene(_currentScene, LoadSceneMode.Single);
         }

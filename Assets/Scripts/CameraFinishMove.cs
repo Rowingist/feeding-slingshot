@@ -5,6 +5,7 @@ using DG.Tweening;
 public class CameraFinishMove : MonoBehaviour
 {
     [SerializeField] private Transform _target;
+    [SerializeField] private Transform _lookingattarget;
 
     private Game _game;
     private Sequence _sequence;
@@ -18,19 +19,17 @@ public class CameraFinishMove : MonoBehaviour
     private void OnEnable()
     {
         _game.Over += OnStart;   
-        _game.Won += OnStart;   
     }
 
     private void OnDisable()
     {
         _game.Over -= OnStart;
-        _game.Won -= OnStart;
     }
 
     private void OnStart()
     {
         _sequence.Append(transform.DOMove(_target.position, 3));
-        _sequence.Insert(0, transform.DORotate(new Vector3(13, -_target.position.x, 0), 3));
+        _sequence.Insert(0, transform.DOLookAt(_lookingattarget.position, 1));
     }
 
     public void SetTarget(Transform target)

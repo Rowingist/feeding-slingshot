@@ -8,13 +8,11 @@ public class PlatformEfectsStarter : MonoBehaviour
     private void OnEnable()
     {
         _game.Over += OnStartEffects;
-        _game.Won += OnStartEffects;
     }
 
     private void OnDisable()
     {
         _game.Over -= OnStartEffects;
-        _game.Won -= OnStartEffects;
     }
 
     private void OnStartEffects()

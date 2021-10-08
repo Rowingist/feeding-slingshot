@@ -1,59 +1,55 @@
 using UnityEngine;
-using DG.Tweening;
 
-[RequireComponent(typeof(PlayerInput), typeof(FoodMover), typeof(PathChanger))]
-[RequireComponent(typeof(PathRenderer))]
-public class Food : MonoBehaviour
+public abstract class Food : MonoBehaviour
 {
-    private PlayerInput _mouseService;
+    private PlayerInput _playerInput;
     private FoodMover _foodMover;
-    private PathChanger _pointerMover;
-    private PathRenderer _pathRenderer;
-    private Vector3 _slingshotRuberPosition;
+    private Transform[] _playerPathPoints;
+    private Transform[] _enemyPathPoints;
 
     private void Awake()
     {
-        _mouseService = GetComponent<PlayerInput>();
+        _playerInput = GetComponentInParent<PlayerInput>();
         _foodMover = GetComponent<FoodMover>();
-        _pointerMover = GetComponent<PathChanger>();
-        _pathRenderer = GetComponent<PathRenderer>();
     }
 
     private void OnEnable()
     {
-        _mouseService.LeftButtonReleased += OnActivateFoodMover;
-        transform.DOMove(_slingshotRuberPosition, 0.3f).SetEase(Ease.Linear).Restart(true);
+        _playerInput.ScreenSideChosen += OnSetPathSide;
+        _playerInput.TouchPerformed += OnEnableMove;
     }
 
     private void OnDisable()
     {
-        _mouseService.LeftButtonReleased -= OnActivateFoodMover;
+        _playerInput.ScreenSideChosen -= OnSetPathSide;
+        _playerInput.TouchPerformed -= OnEnableMove;
+    }
+
+    private void OnEnableMove()
+    {
+        _foodMover.enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out FighterSizeChanger fighter))
-        {
-            _foodMover.enabled = false;
-            _pathRenderer.ResetLine();
-            gameObject.SetActive(false);
-        }
-
-        if(other.TryGetComponent(out ForbidenArea forbidenArea))
+        if (!other.TryGetComponent(out Food food))
         {
             _foodMover.enabled = false;
             gameObject.SetActive(false);
         }
     }
 
-    private void OnActivateFoodMover()
+    private void OnSetPathSide(Vector2 detouchViewPortPosition)
     {
-        _foodMover.enabled = true;
-        _pointerMover.enabled = false;
+        if (detouchViewPortPosition.x > 0.5f && detouchViewPortPosition.y < 0.75f)
+            _foodMover.IntitParabolaRoots(_enemyPathPoints);
+        else if (detouchViewPortPosition.y < 0.75f)
+            _foodMover.IntitParabolaRoots(_playerPathPoints);
     }
 
-    public void InitSlingshotRuberPosition(Vector3 position)
+    public void InitPossiblePathPoints(Transform[] playerPathPoints, Transform[] enemyPathPoints)
     {
-        _slingshotRuberPosition = position + new Vector3(0f, 0f, 0.01f);
+        _playerPathPoints = playerPathPoints;
+        _enemyPathPoints = enemyPathPoints;
     }
 }

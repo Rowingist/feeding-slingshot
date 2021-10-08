@@ -1,10 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(FlightPath), typeof(PlayerInput))]
+[RequireComponent(typeof(Path))]
 public class PathRenderer : MonoBehaviour
 {
-    private FlightPath _flightPath;
-    private PlayerInput _playerInput;
+    [SerializeField] private PlayerInput _playerInput;
+
+    private Path _flightPath;
     private LineRenderer _lineRenderer;
 
     private Vector3 _currentPosition, _previousPososition;
@@ -13,32 +14,28 @@ public class PathRenderer : MonoBehaviour
 
     private void Awake()
     {
-        _flightPath = GetComponent<FlightPath>();
-        _playerInput = GetComponent<PlayerInput>();
+        _flightPath = GetComponent<Path>();
+        _lineRenderer = GetComponent<LineRenderer>();
+        SetPositionCount(_parabolaResolution);
     }
 
     private void OnEnable()
     {
-        _playerInput.LeftButtonReleased += OnDeactivateLine;
+        _playerInput.ScreenSideChosen += Render;
     }
 
     private void OnDisable()
     {
-        _playerInput.LeftButtonReleased -= OnDeactivateLine;
+        _playerInput.ScreenSideChosen -= Render;
     }
 
-    private void Update()
-    {
-        SetPositionCount(_parabolaResolution);
-        Render();
-    }
 
     private void SetPositionCount(int resolution)
     {
         _lineRenderer.positionCount = resolution;
     }
 
-    private void Render()
+    private void Render(Vector2 detouchViewPortPosition)
     {
         _previousPososition = _flightPath.GetPointPosition(0);
         SetLineColor(Color.white);
@@ -81,6 +78,5 @@ public class PathRenderer : MonoBehaviour
     public void ResetLine()
     {
         _lineRenderer.positionCount = 0;
-        _flightPath.MoveHighestPointTo(Vector3.zero);
     }
 }

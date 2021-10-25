@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class Fighter : MonoBehaviour
 {
-    [SerializeField] private Game _game;
+    private int _eatenFoodQuality;
+    private float _elapsedTime;
+    private float _foodPerSecond, _eatenFoodQuantity;
 
     public event Action EatenFreshFood;
     public event Action EatenSpoiledFood;
@@ -11,39 +13,53 @@ public class Fighter : MonoBehaviour
     public event Action Won;
     public event Action Lost;
 
+    public int PlayPoints { get; private set; }
+
+    public int EatenFoodQuality => _eatenFoodQuality;
+
+    private void Update()
+    {
+        _elapsedTime += Time.deltaTime;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out FreshFood freshFood))
         {
+            PlayPoints += 10;
+            _eatenFoodQuality = 1;
             EatenFreshFood?.Invoke();
         }
-        else if(other.TryGetComponent(out SpoiledFood spoiledFood))
+        
+        if(other.TryGetComponent(out SpoiledFood spoiledFood))
         {
+            if(PlayPoints >= 5)
+                PlayPoints -= 5;
+
+            _eatenFoodQuality = 0;
             EatenSpoiledFood?.Invoke();
         }
 
-        if(other.TryGetComponent(out PushingArea pushingArea))
+        if (other.TryGetComponent(out MoverSwitch pushingArea))
         {
             StartedPush?.Invoke();
-            pushingArea.gameObject.SetActive(false);
+        }
+
+        if (other.TryGetComponent(out KillZone killZone))
+        {
+            Lost?.Invoke();
         }
     }
 
-    private void OnEnable()
+    //private float GetAmountPerOneSecond 
+
+    public void SetWinState()
     {
-        _game.Over += OnInvokeGameOverAction;
+        Won?.Invoke();
     }
 
-    private void OnDisable()
+    public void SetLoseStae()
     {
-        _game.Over -= OnInvokeGameOverAction;
-    }
-
-    private void OnInvokeGameOverAction()
-    {
-        if (_game.Points > 0)
-            Won?.Invoke();
-        else
-            Lost?.Invoke();
+        Lost?.Invoke();
     }
 }

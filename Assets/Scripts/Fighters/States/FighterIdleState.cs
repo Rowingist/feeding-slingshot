@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FighterIdleState : FighterBaseState
 {
@@ -7,57 +6,60 @@ public class FighterIdleState : FighterBaseState
     private StartButton _startButton;
     private int _idleAnimationHash;
 
-    public FighterIdleState(Fighter fighter, Text statusText, IStationStateSwitcher stateSwitcher, Animator animator, StartButton startButton)
-        : base(fighter, statusText, stateSwitcher)
+    public FighterIdleState(Fighter fighter,  IStationStateSwitcher stateSwitcher, Animator animator, StartButton startButton)
+        : base(fighter, stateSwitcher)
     {
         _animator = animator;
         _startButton = startButton;
         _idleAnimationHash = Animator.StringToHash("Idle");
     }
 
-    public override void Decreace()
+    public override void Start()
     {
-        _statusText.text = "Is waiting for start.";
+        _startButton.Pushed += OnStartMove;
     }
 
-    public override void Grow()
+    public override void Stop()
     {
-        _statusText.text = "Is waiting for start.";
+        _startButton.Pushed -= OnStartMove;
     }
 
     public override void Idle()
     {
+        Start();
         _animator.Play(_idleAnimationHash);
-    }
-
-    public override void Push()
-    {
-        _statusText.text = "Is waiting for start.";
     }
 
     public override void Run()
     {
-        _statusText.text = "Is waiting for start.";
     }
 
-    public override void Start()
+    public override void StepBackwards()
     {
-        _startButton.GameStarted += OnStartMove;
-        Idle();
+    }
+
+    public override void Eat()
+    {
+    }
+
+    public override void ChangeSize()
+    {
+    }
+
+    public override void PushForward()
+    {
+    }
+
+    public override void Win()
+    {
+    }
+
+    public override void Lose()
+    {
     }
 
     private void OnStartMove()
     {
         _stateSwitcher.SwitchState<FighterRunState>();
-    }
-
-    public override void Stop()
-    {
-        _startButton.GameStarted -= OnStartMove;
-    }
-
-    public override void OverGame()
-    {
-        _statusText.text = "Is waiting for start.";
     }
 }

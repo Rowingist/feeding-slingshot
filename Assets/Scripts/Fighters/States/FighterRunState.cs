@@ -1,65 +1,70 @@
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 
 public class FighterRunState : FighterBaseState
 {   
     private Animator _animator;
-    private PushingArea _pushingArea;
+    private Transform _pushingArea;
     private int _runTriggerHash;
+    private float _runDuration;
 
-    public FighterRunState(Fighter fighter, Text statusText, IStationStateSwitcher stateSwitcher, Animator animator, PushingArea pushingArea)
-        : base(fighter, statusText, stateSwitcher)
+    public FighterRunState(Fighter fighter, IStationStateSwitcher stateSwitcher, Animator animator, 
+        Transform pushingArea, float runDuration)
+        : base(fighter, stateSwitcher)
     {
         _animator = animator;
         _pushingArea = pushingArea;
         _runTriggerHash = Animator.StringToHash("Run");
+        _runDuration = runDuration;
     }
 
-    public override void Decreace()
+    public override void Start()
     {
-        _statusText.text = "Is not decreasing";
+        Run();
+        _fighter.StartedPush += OnStayInPushIdle;
     }
 
-    public override void Grow()
+    public override void Stop()
     {
-        _statusText.text = "Is not growing";
+        _fighter.StartedPush -= OnStayInPushIdle;
     }
 
     public override void Idle()
     {
-        _statusText.text = "Is not staying";
-    }
-
-    public override void Push()
-    {
-        _statusText.text = "Is not pushing";
     }
 
     public override void Run()
     {
         _animator.SetTrigger(_runTriggerHash);
-        _fighter.transform.DOMove(_pushingArea.transform.position, 1f).SetEase(0);
+        _fighter.transform.DOMove(_pushingArea.transform.position, _runDuration).SetEase(Ease.Linear);
     }
 
-    public override void Start()
+    public override void StepBackwards()
     {
-        _fighter.StartedPush += OnStartPush;
-        Run();
     }
 
-    private void OnStartPush()
+    public override void Eat()
     {
-        _stateSwitcher.SwitchState<FighterPushingState>();
     }
 
-    public override void Stop()
+    public override void PushForward()
     {
-        _fighter.StartedPush -= OnStartPush;
     }
 
-    public override void OverGame()
+    public override void ChangeSize()
     {
-        _statusText.text = "Did not win";
+    }
+
+    public override void Win()
+    {
+    }
+
+    public override void Lose()
+    {
+    }
+
+    private void OnStayInPushIdle()
+    {
+        _stateSwitcher.SwitchState<FighterPushingIdleState>();
     }
 }

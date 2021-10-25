@@ -1,16 +1,14 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class StartButton : MonoBehaviour
+public class StartButton : MonoBehaviour, IPointerDownHandler
 {
-    [SerializeField] private GameObject _startButton;
+    public event Action Pushed;
 
-    public event Action GameStarted;
-
-    public void OnButtonClick()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        GameStarted?.Invoke();
-        _startButton.SetActive(false);
+        Pushed?.Invoke();
+        gameObject.SetActive(false);
     }
 }

@@ -13,10 +13,8 @@ public abstract class FighterBaseState
     public abstract void Stop();
     public abstract void Idle();
     public abstract void Run();
-    public abstract void StepBackwards();
     public abstract void Eat();
     public abstract void ChangeSize();
-    public abstract void PushForward();
     public abstract void Win();
     public abstract void Lose();
 }

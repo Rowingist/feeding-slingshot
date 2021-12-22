@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 8482304560545641447}
   - component: {fileID: 4762812359333952578}
   - component: {fileID: 7348783682320091272}
-  - component: {fileID: 8901425956626651153}
-  - component: {fileID: 3915528800721739682}
   - component: {fileID: 3807154744326981306}
+  - component: {fileID: 1217471113606765141}
   m_Layer: 0
   m_Name: Burger spoiled
   m_TagString: Untagged
@@ -43,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9150438831681431901}
-  m_Mesh: {fileID: -4101298594492280764, guid: c43da4adfac4b1d43b16741bfb5aff89, type: 3}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &7348783682320091272
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,12 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 97093b9a966c86a40802d8e9ae09a8e5, type: 2}
-  - {fileID: 2100000, guid: d8cd2cbf0001042468c0f67fe5be205e, type: 2}
-  - {fileID: 2100000, guid: da4e2834ac1b47c46b3e664452dc9ffc, type: 2}
-  - {fileID: 2100000, guid: c4bc16a447c94704db28b0dc5e1435a5, type: 2}
-  - {fileID: 2100000, guid: db4619eaeff66a141b4f6fc45c4d26ac, type: 2}
-  - {fileID: 2100000, guid: f0d7e25a9f632ba459dff5eb04463f77, type: 2}
+  - {fileID: 2100000, guid: eae70846c5209194b96cec4706f0ab67, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -90,31 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8901425956626651153
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9150438831681431901}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5538835
-  m_Center: {x: 0.020260125, y: -0.009604545, z: 0.1125977}
---- !u!114 &3915528800721739682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9150438831681431901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fc34803c66b5f144b809a0c725093a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3807154744326981306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +97,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
+  _approachDistance: 0.04
+--- !u!114 &1217471113606765141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9150438831681431901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2465e750e2acf143b36d68ac2220ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isSpoiled: 1
 --- !u!1001 &4483153352181285838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,6 +121,10 @@ PrefabInstance:
     - target: {fileID: 167252, guid: e7c3a9353c0302b4cb1fab702e1db14f, type: 3}
       propertyPath: m_Name
       value: StinkyCloud (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 167252, guid: e7c3a9353c0302b4cb1fab702e1db14f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 482370, guid: e7c3a9353c0302b4cb1fab702e1db14f, type: 3}
       propertyPath: m_RootOrder

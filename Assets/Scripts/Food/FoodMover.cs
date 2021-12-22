@@ -1,13 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class FoodMover : MonoBehaviour
 {
     [SerializeField] private float _speed = 10f;
+    [SerializeField, Range(0f, 1f)] private float _approachDistance = 0.02f;
 
     private Food _food;
     private Path _flightPath;
 
     private float _instantTime;
+
+    public event Action<float> ApproachingToCharacter;
 
     private void OnEnable()
     {
@@ -22,6 +26,11 @@ public class FoodMover : MonoBehaviour
         {
             _instantTime += Time.deltaTime * _speed;
             transform.position = _flightPath.GetPositionAtTime(_instantTime);
+        }
+
+        if (_instantTime >= _flightPath.Length - _approachDistance)
+        {
+            ApproachingToCharacter?.Invoke(_approachDistance);
         }
     }
 

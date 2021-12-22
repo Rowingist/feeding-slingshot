@@ -1,31 +1,34 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class FighterSizeChangingState : FighterBaseState
 {
+    private Animator _animator;
     private SkinnedMeshRenderer _shapeChanger;
-    private float _scalingAmount;
-    private float _scalingSpeed;
-    private float _currentSize;
 
-    public FighterSizeChangingState(Fighter fighter, IStationStateSwitcher stateSwitcher,
-      SkinnedMeshRenderer shapeChanger, float scalingStep) : base(fighter, stateSwitcher)
+    private float _scalingStep, _currentSize;
+    private int _floatGettingFatHash, _pushTriggerHash, _stopPushingTriggerHash;
+
+    public FighterSizeChangingState(Fighter fighter, IStationStateSwitcher stateSwitcher, 
+        Animator animator, float scalingStep, SkinnedMeshRenderer shapeChanger) : base(fighter, stateSwitcher)
     {
+        _animator = animator;
+        _scalingStep = scalingStep;
         _shapeChanger = shapeChanger;
-        _scalingAmount = scalingStep;
-        _scalingSpeed = 150f;
-        _currentSize = _shapeChanger.GetBlendShapeWeight(2);
+        _floatGettingFatHash = Animator.StringToHash("GettingFat");
+        _pushTriggerHash = Animator.StringToHash("Push");
+        _stopPushingTriggerHash = Animator.StringToHash("StopPush");
     }
 
     public override void Start()
     {
         ChangeSize();
-        Stop();
     }
 
     public override void Stop()
     {
-        _stateSwitcher.SwitchState<FighterPushingIdleState>();
+        
     }
 
     public override void Idle()
@@ -34,10 +37,6 @@ public class FighterSizeChangingState : FighterBaseState
     }
 
     public override void Run()
-    {
-    }
-
-    public override void StepBackwards()
     {
     }
 
@@ -56,10 +55,8 @@ public class FighterSizeChangingState : FighterBaseState
                 Decrease();
                 break;
         }
-    }
 
-    public override void PushForward()
-    {
+        _stateSwitcher.SwitchState<FighterPushingIdleState>();
     }
 
     public override void Win()
@@ -72,20 +69,20 @@ public class FighterSizeChangingState : FighterBaseState
 
     private void Increase()
     {
-        if (_shapeChanger.GetBlendShapeWeight(2) >= 100f)
+        if (_shapeChanger.GetBlendShapeWeight(2) >=  100f)
             return;
 
-        float newSize = _currentSize + _scalingAmount;
-
-        _fighter.StartCoroutine(SmoothGrow(_currentSize, newSize));
+        _fighter.StartCoroutine(SmoothGrow());
     }
 
-    private IEnumerator SmoothGrow(float currentSize, float targetSize)
+    private IEnumerator SmoothGrow()
     {
-        while (currentSize <= targetSize)
+        float newSize = (_shapeChanger.GetBlendShapeWeight(2) + _scalingStep) / 100;
+
+        while (_shapeChanger.GetBlendShapeWeight(2) / 100 <= newSize)
         {
-            currentSize += _scalingSpeed * Time.deltaTime;
-            _shapeChanger.SetBlendShapeWeight(2, currentSize);
+            _currentSize = (_shapeChanger.GetBlendShapeWeight(2) / 100) + 0.005f;
+            _animator.SetFloat(_floatGettingFatHash, _currentSize);
             yield return null;
         }
 
@@ -97,17 +94,17 @@ public class FighterSizeChangingState : FighterBaseState
         if (_shapeChanger.GetBlendShapeWeight(2) <= 0f)
             return;
 
-        float newSize = _currentSize - _scalingAmount;
-
-        _fighter.StartCoroutine(SmoothDecrease(_currentSize, newSize));
+        _fighter.StartCoroutine(SmoothDecrease());
     }
 
-    private IEnumerator SmoothDecrease(float currentSize, float targetSize)
+    private IEnumerator SmoothDecrease()
     {
-        while (currentSize >= targetSize)
+        float newSize = (_shapeChanger.GetBlendShapeWeight(2) - _scalingStep) / 100;
+
+        while (_shapeChanger.GetBlendShapeWeight(2) / 100 >= newSize)
         {
-            currentSize -= _scalingSpeed * Time.deltaTime;
-            _shapeChanger.SetBlendShapeWeight(2, currentSize);
+            _currentSize = (_shapeChanger.GetBlendShapeWeight(2) / 100) - 0.005f;
+            _animator.SetFloat(_floatGettingFatHash, _currentSize);
             yield return null;
         }
 

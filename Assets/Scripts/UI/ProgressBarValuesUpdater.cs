@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections;
 
 [RequireComponent(typeof(Slider))]
 public class ProgressBarValuesUpdater : MonoBehaviour
 {
-    [SerializeField] private GamePointsCounter _game;
-    [SerializeField] private bool _isInverted;
-    [SerializeField] private StartButton _startButton;
+    [SerializeField] private FighterFastMover _fightersBox;
 
     private Slider _slider;
 
@@ -16,40 +15,8 @@ public class ProgressBarValuesUpdater : MonoBehaviour
         _slider = GetComponent<Slider>();
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        _startButton.Pushed += OnStart;
-        _game.PointsIncreased += OnUpdateValue;
-        _game.PointsDecreased += OnUpdateValue;
-    }
-
-    private void OnDisable()
-    {
-        _startButton.Pushed -= OnStart;
-        _game.PointsIncreased -= OnUpdateValue;
-        _game.PointsDecreased -= OnUpdateValue;
-    }
-
-    private void OnStart()
-    {
-        int startPoints = _game.CurrentPoints;
-        _slider.maxValue = _game.PointsQuantityToWin;
-        _slider.DOValue(startPoints, 1f);
-    }
-
-    private void OnUpdateValue()
-    {
-        float currentPoints;
-
-        if (_isInverted)
-        {
-            currentPoints = _slider.maxValue - _game.CurrentPoints;
-        }
-        else
-        {
-            currentPoints = _game.CurrentPoints;
-        }
-
-        _slider.DOValue(currentPoints, 1f); 
+        _slider.value = _fightersBox.transform.position.x;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
@@ -20,6 +21,16 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
+        ChoseScreenSide();
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            TouchPerformed?.Invoke();
+        }
+    }
+
+    private void ChoseScreenSide()
+    {
         Vector2 viewPortTouchPosition = _mainCamera.ScreenToViewportPoint(Input.mousePosition);
 
         if (Input.GetMouseButtonDown(0))
@@ -32,7 +43,7 @@ public class PlayerInput : MonoBehaviour
             _isLeftAiming = viewPortTouchPosition.x < _startTouchPosition.x;
             _isRightAiming = viewPortTouchPosition.x > _startTouchPosition.x;
         }
-        else if(Mathf.Approximately(viewPortTouchPosition.x, _startTouchPosition.x))
+        else if (Mathf.Approximately(viewPortTouchPosition.x, _startTouchPosition.x))
         {
             _isLeftAiming = _isRightAiming = false;
         }
@@ -51,11 +62,6 @@ public class PlayerInput : MonoBehaviour
             {
                 ScreenSideChosen?.Invoke(viewPortTouchPosition);
             }
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            TouchPerformed?.Invoke();
         }
     }
 }

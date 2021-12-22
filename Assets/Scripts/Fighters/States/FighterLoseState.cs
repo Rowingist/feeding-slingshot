@@ -30,19 +30,11 @@ public class FighterLoseState : FighterBaseState
     {
     }
 
-    public override void StepBackwards()
-    {
-    }
-
     public override void Eat()
     {
     }
 
     public override void ChangeSize()
-    {
-    }
-
-    public override void PushForward()
     {
     }
 

@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 8844857262440146575}
   - component: {fileID: 5553190421687462186}
   - component: {fileID: 7706804713086819808}
-  - component: {fileID: 7442857076787053869}
-  - component: {fileID: 7403932761345793832}
   - component: {fileID: -6255980536687001221}
+  - component: {fileID: 7722755459966777432}
   m_Layer: 0
   m_Name: IceCream
   m_TagString: Untagged
@@ -86,31 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7442857076787053869
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8211450245175262261}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.31677708
-  m_Center: {x: 0, y: -0.0000000035334509, z: 0.33862415}
---- !u!114 &7403932761345793832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8211450245175262261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3157726b307e6c48adb2228f1fad1dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6255980536687001221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,3 +98,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
+  _approachDistance: 0.07
+--- !u!114 &7722755459966777432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8211450245175262261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2465e750e2acf143b36d68ac2220ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isSpoiled: 0

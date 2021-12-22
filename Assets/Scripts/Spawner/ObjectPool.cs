@@ -51,4 +51,9 @@ public class ObjectPool : MonoBehaviour
             return null;
         }
     }
+
+    protected GameObject GetNextObject()
+    {
+        return _pool.Keys.ElementAt(_nextPrefabNumber);
+    }
 }

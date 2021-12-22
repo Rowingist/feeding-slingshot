@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class FighterRunState : FighterBaseState
 {   
@@ -36,18 +37,10 @@ public class FighterRunState : FighterBaseState
     public override void Run()
     {
         _animator.SetTrigger(_runTriggerHash);
-        _fighter.transform.DOMove(_pushingArea.transform.position, _runDuration).SetEase(Ease.Linear);
-    }
-
-    public override void StepBackwards()
-    {
+        _fighter.transform.DOMove(_pushingArea.transform.position, _runDuration);
     }
 
     public override void Eat()
-    {
-    }
-
-    public override void PushForward()
     {
     }
 
@@ -65,6 +58,12 @@ public class FighterRunState : FighterBaseState
 
     private void OnStayInPushIdle()
     {
+        _fighter.StartCoroutine(StayInPush(0.2f));
+    }
+
+    private IEnumerator StayInPush(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         _stateSwitcher.SwitchState<FighterPushingIdleState>();
     }
 }

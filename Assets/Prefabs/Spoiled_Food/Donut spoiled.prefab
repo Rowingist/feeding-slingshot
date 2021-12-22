@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 1058005499728239095}
   - component: {fileID: 4107584058630411858}
   - component: {fileID: 2226439276565488280}
-  - component: {fileID: 5295648824560904437}
-  - component: {fileID: 1908668496145595186}
   - component: {fileID: 7816091331220655667}
+  - component: {fileID: -672024094728805663}
   m_Layer: 0
   m_Name: Donut spoiled
   m_TagString: Untagged
@@ -43,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424775194323075917}
-  m_Mesh: {fileID: -7158801944860382266, guid: 49588880051138d4da2fbdfe2a234455, type: 3}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2226439276565488280
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,11 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 97093b9a966c86a40802d8e9ae09a8e5, type: 2}
-  - {fileID: 2100000, guid: 2e568d15d8ef86b4c9d60e0891ba4eeb, type: 2}
-  - {fileID: 2100000, guid: da4e2834ac1b47c46b3e664452dc9ffc, type: 2}
-  - {fileID: 2100000, guid: f0d7e25a9f632ba459dff5eb04463f77, type: 2}
-  - {fileID: 2100000, guid: db4619eaeff66a141b4f6fc45c4d26ac, type: 2}
+  - {fileID: 2100000, guid: eae70846c5209194b96cec4706f0ab67, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -89,31 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5295648824560904437
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 424775194323075917}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.17868023
-  m_Center: {x: -0.0007077306, y: -0.008824497, z: 0.0182147}
---- !u!114 &1908668496145595186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 424775194323075917}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fc34803c66b5f144b809a0c725093a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7816091331220655667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,6 +97,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
+  _approachDistance: 0.04
+--- !u!114 &-672024094728805663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424775194323075917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2465e750e2acf143b36d68ac2220ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isSpoiled: 1
 --- !u!1001 &1006376511154927342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -137,6 +121,10 @@ PrefabInstance:
     - target: {fileID: 167252, guid: e7c3a9353c0302b4cb1fab702e1db14f, type: 3}
       propertyPath: m_Name
       value: StinkyCloud (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 167252, guid: e7c3a9353c0302b4cb1fab702e1db14f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 482370, guid: e7c3a9353c0302b4cb1fab702e1db14f, type: 3}
       propertyPath: m_RootOrder

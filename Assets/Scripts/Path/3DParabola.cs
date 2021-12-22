@@ -20,6 +20,26 @@ public class Parabola3D
 
         RefreshCurve();
     }
+    public Vector3 GetPositionAtTime(float builtLength)
+    {
+        Vector3 positionAtLength;
+        float lengthsRelation = builtLength / Length;
+        float x = lengthsRelation * (_coefficientC - _coefficientA).magnitude;
+
+        if (_tooClose)
+        {
+            x = lengthsRelation * 2f;
+        }
+
+        positionAtLength = _coefficientA * (1f - lengthsRelation) + _coefficientC * lengthsRelation + _height.normalized * _parabola2D.GetFunctionResult(x);
+
+        if (_tooClose)
+        {
+            positionAtLength.Set(_coefficientA.x, positionAtLength.y, _coefficientA.z);
+        }
+
+        return positionAtLength;
+    }
 
     private void RefreshCurve()
     {
@@ -73,29 +93,16 @@ public class Parabola3D
         _height = Vector3.up;
     }
 
-    public Vector3 GetPositionAtLength(float builtLength)
-    {
-        Vector3 positionAtLength;
-        float lengthsRelation = builtLength / Length;
-        float x = lengthsRelation * (_coefficientC - _coefficientA).magnitude;
-
-        if (_tooClose)
-        {
-            x = lengthsRelation * 2f;
-        }
-
-        positionAtLength = _coefficientA * (1f - lengthsRelation) + _coefficientC * lengthsRelation + _height.normalized * _parabola2D.GetFunctionResult(x);
-
-        if (_tooClose)
-        {
-            positionAtLength.Set(_coefficientA.x, positionAtLength.y, _coefficientA.z);
-        }
-
-        return positionAtLength;
-    }
-
     private Vector3 GetClosestPointInLine(Ray ray, Vector3 currentPoint)
     {
         return ray.origin + ray.direction * Vector3.Dot(ray.direction, currentPoint - ray.origin);
+    }
+
+    public void UpdateCoefficients(Vector3 a, Vector3 b, Vector3 c)
+    {
+        _coefficientA = a;
+        _coefficientB = b;
+        _coefficientC = c;
+        RefreshCurve();
     }
 }

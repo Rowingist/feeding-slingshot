@@ -1,33 +1,41 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class FoodMover : MonoBehaviour
 {
-    [SerializeField] private float _speed = 1f;
+    [SerializeField] private float _speed = 10f;
+    [SerializeField, Range(0f, 1f)] private float _approachDistance = 0.02f;
 
-    private FlightPath _flightPath;
-    private float _instantTime = float.MaxValue;
+    private Food _food;
+    private Path _flightPath;
 
-    private void Awake()
-    {
-        _flightPath = GetComponent<FlightPath>();
-    }
+    private float _instantTime;
+
+    public event Action<float> ApproachingToCharacter;
 
     private void OnEnable()
     {
+        _food = GetComponent<Food>();
+        _food.enabled = false;
         _instantTime = 0f;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        Move();
-    }
-
-    private void Move()
-    {
-        if (_instantTime < _flightPath.Lenght)
+        if (_instantTime < _flightPath.Length)
         {
             _instantTime += Time.deltaTime * _speed;
-            transform.position = _flightPath.GetPositionForPoint(_instantTime);
+            transform.position = _flightPath.GetPositionAtTime(_instantTime);
         }
+
+        if (_instantTime >= _flightPath.Length - _approachDistance)
+        {
+            ApproachingToCharacter?.Invoke(_approachDistance);
+        }
+    }
+
+    public void IntitPath(Path currentPath)
+    {
+        _flightPath = currentPath;
     }
 }

@@ -1,59 +1,91 @@
+using System;
+using System.Collections;
 using UnityEngine;
-using DG.Tweening;
 
-[RequireComponent(typeof(PlayerInput), typeof(FoodMover), typeof(PathChanger))]
-[RequireComponent(typeof(PathRenderer))]
 public class Food : MonoBehaviour
 {
-    private PlayerInput _mouseService;
+    [SerializeField] private bool _isSpoiled;
+
+    private PlayerInput _playerInput;
     private FoodMover _foodMover;
-    private PathChanger _pointerMover;
-    private PathRenderer _pathRenderer;
-    private Vector3 _slingshotRuberPosition;
+    private Path _leftPath, _rightPath;
+    private float _followCameraSpeed, _activationTime;
+
+    public bool IsSpoiled => _isSpoiled;
+    public int PathSideIndex { get; private set; }
+    public float ActivationTime => _activationTime;
+
+    public event Action StartedToMove;
 
     private void Awake()
     {
-        _mouseService = GetComponent<PlayerInput>();
+        _playerInput = GetComponentInParent<PlayerInput>();
         _foodMover = GetComponent<FoodMover>();
-        _pointerMover = GetComponent<PathChanger>();
-        _pathRenderer = GetComponent<PathRenderer>();
+        _followCameraSpeed = 3f;
     }
 
     private void OnEnable()
     {
-        _mouseService.LeftButtonReleased += OnActivateFoodMover;
-        transform.DOMove(_slingshotRuberPosition, 0.3f).SetEase(Ease.Linear).Restart(true);
+        _foodMover.ApproachingToCharacter += OnDeactivate;
+        _playerInput.ScreenSideChosen += OnSetPathSide;
+        _playerInput.TouchPerformed += OnEnableMove;
+    }
+
+    private void Update()
+    {
+        Vector3 newPosition = _leftPath.GetStartPoint();
+        float smoothSpeed = _followCameraSpeed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, newPosition, smoothSpeed);
     }
 
     private void OnDisable()
     {
-        _mouseService.LeftButtonReleased -= OnActivateFoodMover;
+        _foodMover.ApproachingToCharacter += OnDeactivate;
+        _playerInput.ScreenSideChosen -= OnSetPathSide;
+        _playerInput.TouchPerformed -= OnEnableMove;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnEnableMove()
     {
-        if (other.TryGetComponent(out FighterSizeChanger fighter))
-        {
-            _foodMover.enabled = false;
-            _pathRenderer.ResetLine();
-            gameObject.SetActive(false);
-        }
-
-        if(other.TryGetComponent(out ForbidenArea forbidenArea))
-        {
-            _foodMover.enabled = false;
-            gameObject.SetActive(false);
-        }
-    }
-
-    private void OnActivateFoodMover()
-    {
+        StartedToMove?.Invoke();
         _foodMover.enabled = true;
-        _pointerMover.enabled = false;
     }
 
-    public void InitSlingshotRuberPosition(Vector3 position)
+    public void InitPossiblePaths(Path leftPath, Path rightPath)
     {
-        _slingshotRuberPosition = position + new Vector3(0f, 0f, 0.01f);
+        _leftPath = leftPath;
+        _rightPath = rightPath;
+    }
+
+    public void SetActivationTime(float activationTime)
+    {
+        _activationTime = activationTime;
+    }
+
+    private void OnSetPathSide(Vector2 detouchViewPortPosition)
+    {
+        if (detouchViewPortPosition.x > 0.5f && detouchViewPortPosition.y < 0.75f)
+        {
+            _foodMover.IntitPath(_rightPath);
+            PathSideIndex = 1;
+        }
+        else if (detouchViewPortPosition.y < 0.75f)
+        {
+            _foodMover.IntitPath(_leftPath);
+            PathSideIndex = -1;
+        }
+    }
+
+    private void OnDeactivate(float approachDistance)
+    {
+        StartCoroutine(SetDelayDeactivation(approachDistance));
+    }
+
+    private IEnumerator SetDelayDeactivation(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        _foodMover.enabled = false;
+        gameObject.SetActive(false);
     }
 }
